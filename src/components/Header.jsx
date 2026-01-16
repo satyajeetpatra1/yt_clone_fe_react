@@ -2,6 +2,7 @@ import { FaBars, FaMoon, FaSearch, FaSun, FaUserCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/slices/themeSlice";
 import { toggleSidebar } from "../redux/slices/uiSlice";
+import { Link } from "react-router-dom";
 
 function Header() {
   const dark = useSelector((store) => store.theme.dark);
@@ -41,10 +42,10 @@ function Header() {
         </button>
 
         {/* Sign In */}
-        <div className="flex items-center gap-2 px-4 py-1 border bg-transparent rounded-full dark:text-white text-blue-600 hover:bg-blue-50 border-gray-600 dark:hover:bg-gray-600 cursor-pointer">
+        <Link to={"/login"} className="flex items-center gap-2 px-4 py-1 border bg-transparent rounded-full dark:text-white text-blue-600 hover:bg-blue-50 border-gray-600 dark:hover:bg-gray-600 cursor-pointer">
           <FaUserCircle size={20} />
           Sign in
-        </div>
+        </Link>
       </div>
     </header>
   );
