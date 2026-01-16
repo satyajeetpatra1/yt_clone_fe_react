@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import API from "../services/api";
 import toast from "react-hot-toast";
 import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 import SuggestedVideoCard from "../components/SuggestedVideoCard";
+import { closeSidebar } from "../redux/slices/uiSlice";
 
 function Watch() {
   const fallbackAvatar = "https://placehold.co/100x100?text=User";
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(closeSidebar());
+  }, [dispatch]);
 
   const { id } = useParams();
   const user = useSelector((store) => store.auth.user);
