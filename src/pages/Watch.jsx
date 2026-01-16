@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import API from "../services/api";
 import toast from "react-hot-toast";
 import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
+import SuggestedVideoCard from "../components/SuggestedVideoCard";
 
 function Watch() {
   const fallbackAvatar = "https://placehold.co/100x100?text=User";
@@ -27,6 +28,21 @@ function Watch() {
     };
 
     fetchVideo();
+  }, [id]);
+
+  const [suggestedVideos, setSuggestedVideos] = useState([]);
+
+  useEffect(() => {
+    const fetchSuggested = async () => {
+      try {
+        const res = await API.get("/videos");
+        setSuggestedVideos(res.data.filter((v) => v._id !== id));
+      } catch {
+        // silent fail
+      }
+    };
+
+    fetchSuggested();
   }, [id]);
 
   /* ---------------- FETCH COMMENTS ---------------- */
@@ -192,9 +208,10 @@ function Watch() {
       </div>
 
       {/* ================= RIGHT ================= */}
-      <div className="w-full md:w-75">
-        {/* Suggested videos placeholder */}
-        <p className="text-gray-500 text-sm">Suggested videos coming soon</p>
+      <div className="w-full md:w-95 lg:w-105 space-y-3">
+        {suggestedVideos.map((video) => (
+          <SuggestedVideoCard key={video._id} video={video} />
+        ))}
       </div>
     </div>
   );
