@@ -12,6 +12,7 @@ import { Toaster } from "react-hot-toast";
 import Watch from "./pages/Watch.jsx";
 import Channel from "./pages/Channel.jsx";
 import MyChannel from "./pages/MyChannel.jsx";
+import Search from "./pages/Search.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "channel/:channelId",
         element: <Channel />,
+      },
+      {
+        path: "search",
+        element: <Search />,
       },
     ],
   },

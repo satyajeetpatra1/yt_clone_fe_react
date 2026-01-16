@@ -20,7 +20,7 @@ function Sidebar() {
   return (
     <aside
       className={`
-        h-screen sticky top-0
+        h-screen sticky hidden md:block top-0
         ${open ? "w-56" : "w-20"}
         bg-white dark:bg-black
         border-r dark:border-zinc-800

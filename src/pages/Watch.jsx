@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import API from "../services/api";
 import toast from "react-hot-toast";
@@ -124,7 +124,7 @@ function Watch() {
         {/* Channel + Actions */}
         <div className="flex items-center justify-between flex-wrap gap-4 mt-3">
           {/* Channel */}
-          <div className="flex items-center gap-3">
+          <Link to={`/channel/${video.channel._id}`} className="flex items-center gap-3">
             <img
               src={video.channel?.avatar || fallbackAvatar}
               className="w-10 h-10 rounded-full"
@@ -133,7 +133,7 @@ function Watch() {
               <p className="font-medium">{video.channel?.channelName}</p>
               <p className="text-xs text-gray-500">{video.views} views</p>
             </div>
-          </div>
+          </Link>
 
           {/* Like / Dislike */}
           <div className="flex items-center bg-gray-100 dark:bg-zinc-800 rounded-full overflow-hidden">
