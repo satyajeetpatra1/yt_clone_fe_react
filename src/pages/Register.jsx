@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import API from "../services/api";
 
 export default function Register() {
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     username: "",
@@ -15,7 +18,19 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if (!form.email || !form.username || !form.password) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    try {
+      const res = await API.post("/auth/register", form);
+      toast.success(res.data.message || "Account created successfully");
+      navigate("/login");
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Registration failed");
+    }
   };
 
   return (

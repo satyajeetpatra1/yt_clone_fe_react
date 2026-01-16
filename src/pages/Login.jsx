@@ -1,11 +1,17 @@
 import { useState } from "react";
-import { Link  } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import API from "../services/api";
+import { setUser } from "../redux/slices/authSlice";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [form, setForm] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -14,7 +20,26 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if (!form.email || !form.password) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    try {
+      const res = await API.post("/auth/login", form);
+
+      // store token
+      localStorage.setItem("token", res.data.token);
+
+      // store user in redux + localStorage
+      dispatch(setUser(res.data.user));
+
+      toast.success("Logged in successfully");
+      navigate("/");
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Invalid email or password");
+    }
   };
 
   return (
