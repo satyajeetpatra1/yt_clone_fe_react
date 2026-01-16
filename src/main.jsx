@@ -9,6 +9,9 @@ import { store } from "./redux/store.js";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import { Toaster } from "react-hot-toast";
+import Watch from "./pages/Watch.jsx";
+import Channel from "./pages/Channel.jsx";
+import MyChannel from "./pages/MyChannel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +21,15 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },
+      { path: "watch/:id", element: <Watch /> },
+      {
+        path: "my-channel",
+        element: <MyChannel />,
+      },
+      {
+        path: "channel/:channelId",
+        element: <Channel />,
+      },
     ],
   },
 ]);

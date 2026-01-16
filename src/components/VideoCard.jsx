@@ -31,7 +31,7 @@ function VideoCard({ video }) {
       {/* Thumbnail */}
       <div className="relative w-full aspect-video bg-gray-200 dark:bg-zinc-800 rounded-lg overflow-hidden">
         <img
-          src={video.thumbnailUrl}
+          src={video.thumbnailUrl || fallbackThumbnail}
           onError={(e) => (e.target.src = fallbackThumbnail)}
           alt={video.title}
           loading="lazy"
@@ -43,7 +43,7 @@ function VideoCard({ video }) {
       <div className="flex gap-3 mt-3">
         {/* Channel Avatar */}
         <img
-          src={video.channel?.avatar}
+          src={video.channel?.avatar || fallbackAvatar}
           onError={(e) => (e.target.src = fallbackAvatar)}
           alt="channel"
           loading="lazy"
