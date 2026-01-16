@@ -1,11 +1,18 @@
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import MobileBottomNav from "./components/MobileBottomNav";
 
 function App() {
   return (
-    <div>
+    <div className="flex flex-col">
       <Header />
-      <Outlet />
+      <div className="flex flex-1">
+        <Sidebar />
+        <Outlet />
+      </div>
+
+      <MobileBottomNav />
     </div>
   );
 }

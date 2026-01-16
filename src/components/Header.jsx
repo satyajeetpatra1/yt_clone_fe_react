@@ -1,11 +1,21 @@
-import { FaBars, FaSearch, FaSun, FaUserCircle } from "react-icons/fa";
+import { FaBars, FaMoon, FaSearch, FaSun, FaUserCircle } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../redux/slices/themeSlice";
+import { toggleSidebar } from "../redux/slices/uiSlice";
 
 function Header() {
+  const dark = useSelector((store) => store.theme.dark);
+  const dispatch = useDispatch();
+
   return (
-    <header className="flex items-center justify-between px-4 h-14 border-b bg-white dark:bg-black">
+    <header className="flex items-center justify-between px-4 h-14 border-b bg-white dark:bg-black w-full">
       {/* Logo & Title */}
       <div className="flex items-center gap-4">
-        <FaBars size={22} className="cursor-pointer" />
+        <FaBars
+          size={22}
+          className="cursor-pointer"
+          onClick={() => dispatch(toggleSidebar())}
+        />
         <span className="font-bold text-lg">YouTube</span>
       </div>
 
@@ -26,8 +36,8 @@ function Header() {
 
       <div className="flex items-center gap-4 relative">
         {/* toggle theme */}
-        <button>
-          <FaSun />
+        <button onClick={() => dispatch(toggleTheme())}>
+          {dark ? <FaSun /> : <FaMoon />}
         </button>
 
         {/* Sign In */}
