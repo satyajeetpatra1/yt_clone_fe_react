@@ -3,10 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/slices/themeSlice";
 import { toggleSidebar } from "../redux/slices/uiSlice";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { logout } from "../redux/slices/authSlice";
 
 function Header() {
   const dark = useSelector((store) => store.theme.dark);
+  const user = useSelector((store) => store.auth.user);
   const dispatch = useDispatch();
+
+  const [open, setOpen] = useState(false);
 
   return (
     <header className="flex items-center justify-between px-4 h-14 border-b bg-white dark:bg-black w-full">
@@ -42,10 +47,46 @@ function Header() {
         </button>
 
         {/* Sign In */}
-        <Link to={"/login"} className="flex items-center gap-2 px-4 py-1 border bg-transparent rounded-full dark:text-white text-blue-600 hover:bg-blue-50 border-gray-600 dark:hover:bg-gray-600 cursor-pointer">
-          <FaUserCircle size={20} />
-          Sign in
-        </Link>
+        {user ? (
+          <div className="relative">
+            <img
+              src={
+                user.avatar ||
+                "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
+              }
+              alt="profile"
+              className="w-8 h-8 rounded-full cursor-pointer bg-white"
+              onClick={() => setOpen(!open)}
+            />
+
+            {open && (
+              <div className="absolute right-0 top-10 w-40 bg-white dark:bg-zinc-800 shadow rounded">
+                <p className="px-4 py-2 font-semibold">{user.username}</p>
+                <hr />
+                <Link
+                  to={`/channel/${user._id}`}
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-700"
+                >
+                  Your Channel
+                </Link>
+                <button
+                  onClick={() => dispatch(logout())}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-700"
+                >
+                  Sign out
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link
+            to={"/login"}
+            className="flex items-center gap-2 px-4 py-1 border bg-transparent rounded-full dark:text-white text-blue-600 hover:bg-blue-50 border-gray-600 dark:hover:bg-gray-600 cursor-pointer"
+          >
+            <FaUserCircle size={20} />
+            Sign in
+          </Link>
+        )}
       </div>
     </header>
   );
