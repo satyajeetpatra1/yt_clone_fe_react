@@ -86,7 +86,7 @@ function CreateChannelModal({ onClose, onSuccess }) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm"
+              className="px-4 py-2 text-sm cursor-pointer"
             >
               Cancel
             </button>
@@ -94,7 +94,7 @@ function CreateChannelModal({ onClose, onSuccess }) {
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-red-600 text-white rounded"
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded cursor-pointer"
             >
               {loading ? "Creating..." : "Create Channel"}
             </button>

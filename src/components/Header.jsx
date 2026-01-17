@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/slices/themeSlice";
 import { toggleSidebar } from "../redux/slices/uiSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { logout } from "../redux/slices/authSlice";
+import YTLogo from "../assets/Youtube_logo.png";
+import toast from "react-hot-toast";
 
 function Header() {
   const dark = useSelector((store) => store.theme.dark);
@@ -16,13 +18,29 @@ function Header() {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
+  const debounceRef = useRef(null);
+
   const handleSearch = () => {
+    clearTimeout(debounceRef.current);
+
     if (!query.trim()) {
       navigate("/");
       return;
     }
     navigate(`/search?q=${query}`);
   };
+
+  useEffect(() => {
+    if (!query.trim()) return;
+
+    clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(() => {
+      navigate(`/search?q=${query}`);
+    }, 800);
+
+    return () => clearTimeout(debounceRef.current);
+  }, [query, navigate]);
 
   return (
     <header className="flex items-center justify-between px-4 h-14 border-b bg-white dark:bg-black w-full">
@@ -33,7 +51,16 @@ function Header() {
           className="cursor-pointer hidden md:block"
           onClick={() => dispatch(toggleSidebar())}
         />
-        <span className="font-bold text-lg">YouTube</span>
+        <span className="font-bold text-lg flex gap-x-3">
+          <img
+            src={YTLogo}
+            height={40}
+            width={40}
+            className="mx-auto my-auto"
+            alt="YTlogo"
+          />
+          <span className="my-auto">YouTube</span>
+        </span>
       </div>
 
       {/* Center Search */}
@@ -56,7 +83,10 @@ function Header() {
 
       <div className="flex items-center gap-4 relative">
         {/* toggle theme */}
-        <button onClick={() => dispatch(toggleTheme())}>
+        <button
+          onClick={() => dispatch(toggleTheme())}
+          className="cursor-pointer hover:scale-150 duration-100"
+        >
           {dark ? <FaSun /> : <FaMoon />}
         </button>
 
@@ -74,7 +104,10 @@ function Header() {
             />
 
             {open && (
-              <div className="absolute z-50 right-0 top-10 w-40 bg-white dark:bg-zinc-800 shadow rounded">
+              <div
+                onClick={() => setOpen(false)}
+                className="absolute z-50 right-0 top-10 w-40 bg-white dark:bg-zinc-800 shadow rounded"
+              >
                 <p className="px-4 py-2 font-semibold">{user.username}</p>
                 <hr />
                 <Link
@@ -84,7 +117,9 @@ function Header() {
                   Your Channel
                 </Link>
                 <button
-                  onClick={() => dispatch(logout())}
+                  onClick={() => {
+                    if (dispatch(logout())) toast.success("User logged out!");
+                  }}
                   className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-700"
                 >
                   Sign out

@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
+import YTLogo from "../assets/Youtube_logo.png";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -36,6 +37,16 @@ export default function Register() {
   return (
     <div className="flex w-full h-full items-center justify-center min-h-screen bg-gray-100 dark:bg-black">
       <div className="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded shadow">
+        <span className="font-bold text-lg flex gap-x-3 justify-center w-fit mx-auto">
+          <img
+            src={YTLogo}
+            height={40}
+            width={40}
+            className="mx-auto my-auto"
+            alt="YTlogo"
+          />
+          <span className="my-auto">YouTube</span>
+        </span>
         <h1 className="text-2xl font-semibold mb-2">Create your account</h1>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
           Continue to YouTube
@@ -71,7 +82,7 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer"
           >
             Create account
           </button>
