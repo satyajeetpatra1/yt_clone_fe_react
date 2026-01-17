@@ -6,9 +6,11 @@ const uiSlice = createSlice({
     sidebarOpen: true,
   },
   reducers: {
+    // Toggle sidebar open/close state
     toggleSidebar: (state) => {
       state.sidebarOpen = !state.sidebarOpen;
     },
+    // Close the sidebar
     closeSidebar: (state) => {
       state.sidebarOpen = false;
     },

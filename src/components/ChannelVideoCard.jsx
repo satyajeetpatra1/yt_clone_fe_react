@@ -2,13 +2,21 @@ import { Link } from "react-router-dom";
 import API from "../services/api";
 import toast from "react-hot-toast";
 
+// Component to display a video card in a channel
 function ChannelVideoCard({ video, isOwner, onDelete }) {
+  // Fallback thumbnail if video thumbnail fails to load
   const fallbackThumbnail = "https://placehold.co/1280x720?text=No+Thumbnail";
 
+  // Handler to delete the video
   const handleDelete = async () => {
     try {
+      // Make API call to delete the video
       await API.delete(`/videos/${video._id}`);
+
+      // Notify user of successful deletion
       toast.success("Video deleted");
+
+      // Call onDelete callback to update parent component
       onDelete(video._id);
     } catch {
       toast.error("Failed to delete video");

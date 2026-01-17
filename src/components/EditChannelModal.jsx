@@ -2,25 +2,35 @@ import { useState } from "react";
 import API from "../services/api";
 import toast from "react-hot-toast";
 
+// Component to edit an existing channel
 function EditChannelModal({ channel, onClose, onUpdated }) {
+  // State variables for channel details
   const [channelName, setChannelName] = useState(channel.channelName);
   const [description, setDescription] = useState(channel.description || "");
   const [avatar, setAvatar] = useState(channel.avatar || "");
   const [banner, setBanner] = useState(channel.banner || "");
   const [loading, setLoading] = useState(false);
 
+  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
+
+      // API call to update the channel
       const res = await API.put(
         `/channels/${channel._id}`,
         { channelName, description, avatar, banner }
       );
 
+      // Success feedback
       toast.success("Channel updated");
+
+      // Invoke updated callback with updated channel data
       onUpdated(res.data);
+
+      // Close the modal
       onClose();
     } catch (err) {
       toast.error(err?.response?.data?.message || "Update failed");

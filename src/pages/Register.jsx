@@ -4,29 +4,37 @@ import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import YTLogo from "../assets/Youtube_logo.png";
 
+// Register component
 export default function Register() {
   const navigate = useNavigate();
 
+  // Form state
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
   });
 
+  // Handle input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation
     if (!form.email || !form.username || !form.password) {
       toast.error("All fields are required");
       return;
     }
 
     try {
+      // API call to register
       const res = await API.post("/auth/register", form);
+
+      // Success feedback
       toast.success(res.data.message || "Account created successfully");
       navigate("/login");
     } catch (err) {

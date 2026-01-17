@@ -7,6 +7,7 @@ const videosSlice = createSlice({
     loading: false,
   },
   reducers: {
+    // Set the list of videos
     setVideos: (state, action) => {
       state.videos = action.payload;
     },

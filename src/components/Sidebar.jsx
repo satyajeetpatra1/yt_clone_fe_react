@@ -7,6 +7,7 @@ import {
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+// Navigation items
 const items = [
   { icon: <MdHomeFilled size={24} />, label: "Home", path: "/" },
   { icon: <MdSubscriptions size={24} />, label: "Subscriptions", path: "/" },
@@ -14,6 +15,7 @@ const items = [
   { icon: <MdHistory size={24} />, label: "History", path: "/" },
 ];
 
+// Sidebar component with navigation links
 function Sidebar() {
   const open = useSelector((state) => state.ui.sidebarOpen);
 

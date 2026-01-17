@@ -7,26 +7,34 @@ import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 import SuggestedVideoCard from "../components/SuggestedVideoCard";
 import { closeSidebar } from "../redux/slices/uiSlice";
 
+// Watch page component
 function Watch() {
+  // Fallback avatar for user
   const fallbackAvatar = "https://placehold.co/100x100?text=User";
 
+  // Redux dispatch
   const dispatch = useDispatch();
 
+  // Close sidebar on mount
   useEffect(() => {
     dispatch(closeSidebar());
   }, [dispatch]);
 
   const { id } = useParams();
+
+  // Get current user from Redux store
   const user = useSelector((store) => store.auth.user);
 
+  // Component state
   const [video, setVideo] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
-  /* ---------------- FETCH VIDEO ---------------- */
+  // Fetch video data
   useEffect(() => {
     const fetchVideo = async () => {
       try {
+        // API call to get video details
         const res = await API.get(`/videos/${id}`);
         setVideo(res.data);
       } catch {
@@ -39,9 +47,11 @@ function Watch() {
 
   const [suggestedVideos, setSuggestedVideos] = useState([]);
 
+  // Fetch suggested videos
   useEffect(() => {
     const fetchSuggested = async () => {
       try {
+        // API call to get all videos
         const res = await API.get("/videos");
         setSuggestedVideos(res.data.filter((v) => v._id !== id));
       } catch {
@@ -52,7 +62,7 @@ function Watch() {
     fetchSuggested();
   }, [id]);
 
-  /* ---------------- FETCH COMMENTS ---------------- */
+  // Fetch comments for the video
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -66,15 +76,17 @@ function Watch() {
     fetchComments();
   }, [id]);
 
-  /* ---------------- LIKE / DISLIKE ---------------- */
+  // LIKE / DISLIKE HANDLER
 
   const handleReaction = async (type) => {
+    // User must be logged in
     if (!user) {
       toast.error("Login to like or dislike");
       return;
     }
 
     try {
+      // API call to register reaction
       const res = await API.put(`/videos/${id}/${type}`);
 
       // backend should return updated video
@@ -84,11 +96,19 @@ function Watch() {
     }
   };
 
-  /* ---------------- ADD COMMENT ---------------- */
+  // ADD COMMENT HANDLER
   const handleAddComment = async () => {
+    // User must be logged in
+    if (!user) {
+      toast.error("Login to add a comment");
+      return;
+    }
+
+    // Comment text must not be empty
     if (!newComment.trim()) return;
 
     try {
+      // API call to add comment
       const res = await API.post(`/comments/${id}`, { text: newComment });
 
       setComments([{ ...res?.data, user: user }, ...comments]);
@@ -106,7 +126,6 @@ function Watch() {
 
   return (
     <div className="flex flex-col md:flex-row gap-6 p-4 w-full min-h-[calc(100vh-56px)] bg-gray-100 dark:bg-zinc-900">
-      {/* ================= LEFT ================= */}
       <div className="w-full flex-1">
         {/* Video */}
         <div className="w-full aspect-video bg-black rounded-lg overflow-hidden">
@@ -124,7 +143,10 @@ function Watch() {
         {/* Channel + Actions */}
         <div className="flex items-center justify-between flex-wrap gap-4 mt-3">
           {/* Channel */}
-          <Link to={`/channel/${video.channel._id}`} className="flex items-center gap-3">
+          <Link
+            to={`/channel/${video.channel._id}`}
+            className="flex items-center gap-3"
+          >
             <img
               src={video.channel?.avatar || fallbackAvatar}
               className="w-10 h-10 rounded-full"
@@ -164,11 +186,11 @@ function Watch() {
           <p className="text-sm whitespace-pre-line">{video.description}</p>
         </div>
 
-        {/* ================= COMMENTS ================= */}
+        {/* Comments */}
         <div className="mt-6">
           <h2 className="font-semibold mb-4">{comments.length} Comments</h2>
 
-          {/* Add Comment */}
+          {/* Add Comment if user is logged in */}
           {user ? (
             <div className="flex gap-3 mb-6">
               <img
@@ -214,7 +236,7 @@ function Watch() {
         </div>
       </div>
 
-      {/* ================= RIGHT ================= */}
+      {/* suggested videos */}
       <div className="w-full md:w-95 lg:w-105 space-y-3">
         {suggestedVideos.map((video) => (
           <SuggestedVideoCard key={video._id} video={video} />

@@ -7,11 +7,13 @@ import VideoCard from "../components/VideoCard";
 import { categories } from "../constants/categories";
 
 function Home() {
+  // Redux dispatch and state
   const dispatch = useDispatch();
   const { videos } = useSelector((store) => store.video);
 
   const [activeCategory, setActiveCategory] = useState("All");
 
+  // Fetch videos on component mount and when activeCategory changes
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -31,7 +33,7 @@ function Home() {
 
   return (
     <div className="p-4 pt-6 w-full min-h-[calc(100vh-56px)] bg-gray-100 dark:bg-zinc-900 overflow-hidden">
-      {/* -------- CATEGORY BAR -------- */}
+      {/* Category Bar */}
       <div className="flex gap-3 px-4 py-3 overflow-x-auto scrollbar-hide">
         {categories.map((cat) => (
           <button
@@ -49,6 +51,7 @@ function Home() {
         ))}
       </div>
 
+      {/* Videos Grid */}
       <div
         className="
         grid gap-6

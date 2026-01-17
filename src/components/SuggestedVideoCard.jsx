@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
 
+// Fallback thumbnail URL
 const fallbackThumb = "https://placehold.co/320x180?text=Video";
 
+// Format views count
 const formatViews = (views = 0) => {
   if (views >= 1_000_000) return (views / 1_000_000).toFixed(1) + "M views";
   if (views >= 1_000) return (views / 1_000).toFixed(1) + "K views";
   return `${views} views`;
 };
 
+// Format date to "DD MMM YY"
 const formatDate = (date) =>
   new Date(date).toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -15,6 +18,7 @@ const formatDate = (date) =>
     year: "2-digit",
   });
 
+// Component to display a suggested video card
 function SuggestedVideoCard({ video }) {
   return (
     <Link to={`/watch/${video._id}`} className="flex gap-3 mb-3 group">

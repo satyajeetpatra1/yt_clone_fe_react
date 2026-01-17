@@ -4,15 +4,19 @@ import API from "../services/api";
 import VideoCard from "../components/VideoCard";
 import toast from "react-hot-toast";
 
+// Search page component
 function Search() {
+  // Get search query from URL params
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch search results when query changes
   useEffect(() => {
     const fetchResults = async () => {
       try {
+        // API call to search videos
         const res = await API.get(`/videos/search?q=${query}`);
         setVideos(res.data);
       } catch {

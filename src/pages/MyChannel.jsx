@@ -6,14 +6,19 @@ import CreateChannelModal from "../components/CreateChannelModal";
 import YTLogo from "../assets/Youtube_logo.png";
 import { useNavigate } from "react-router-dom";
 
+// MyChannel page to view or create user's channel
 function MyChannel() {
   const navigate = useNavigate();
 
-  const user = useSelector((state) => state.auth.user);
+  // Get current user from Redux store
+  const user = useSelector((store) => store.auth.user);
+
+  // Component state
   const [channelData, setChannelData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
+  // Fetch user's channel data
   useEffect(() => {
     if (!user) {
       setLoading(false);
@@ -22,6 +27,7 @@ function MyChannel() {
 
     const fetchMyChannel = async () => {
       try {
+        // API call to get user's channel
         const res = await API.get("/channels/me");
         setChannelData(res.data.channel);
       } catch {
@@ -34,6 +40,7 @@ function MyChannel() {
     fetchMyChannel();
   }, [user]);
 
+  // If user is not logged in
   if (!user) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -44,6 +51,7 @@ function MyChannel() {
 
   if (loading) return null;
 
+  // If user has no channel, show create channel prompt
   if (!channelData) {
     return (
       <div className="min-h-[70vh] w-full flex items-center justify-center px-4">
@@ -86,6 +94,7 @@ function MyChannel() {
     );
   }
 
+  // If user has a channel, show the channel page
   return <Channel channelId={channelData._id} />;
 }
 

@@ -8,14 +8,19 @@ import { FaUpload, FaEdit, FaTrash } from "react-icons/fa";
 import EditChannelModal from "../components/EditChannelModal";
 import UploadVideoModal from "../components/UploadVideoModal";
 
+// Channel page displaying channel info and videos
 function Channel({ channelId: propChannelId }) {
+  // Fallback banner URL
   const fallbackBanner = "https://placehold.co/1200x300?text=Channel+Banner";
 
+  // Get channelId from props or URL params
   const params = useParams();
   const channelId = propChannelId || params.channelId;
 
-  const user = useSelector((state) => state.auth.user);
+  // Get current user from Redux store
+  const user = useSelector((store) => store.auth.user);
 
+  // Component state
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +30,7 @@ function Channel({ channelId: propChannelId }) {
 
   const isOwner = user && channel?.owner?._id === user._id;
 
+  // Fetch channel data and videos
   useEffect(() => {
     const fetchChannel = async () => {
       try {
@@ -41,12 +47,17 @@ function Channel({ channelId: propChannelId }) {
     fetchChannel();
   }, [channelId]);
 
+  // Handler to delete a video
   const handleDeleteVideo = async (id) => {
     if (!window.confirm("Delete this video?")) return;
 
     try {
+      // API call to delete the video
       await API.delete(`/videos/${id}`);
+
+      // Update videos state to remove deleted video
       setVideos((prev) => prev.filter((v) => v._id !== id));
+      // Show success message
       toast.success("Video deleted");
     } catch {
       toast.error("Failed to delete video");
@@ -57,9 +68,7 @@ function Channel({ channelId: propChannelId }) {
 
   return (
     <div className="pb-10 w-full">
-      {/* -------- CHANNEL HEADER -------- */}
-
-      {/* -------- BANNER -------- */}
+      {/* Banner */}
       <div className="w-full h-40 sm:h-52 md:h-64 bg-gray-200 dark:bg-zinc-800 overflow-hidden mx-auto">
         <img
           src={channel?.banner}
@@ -70,6 +79,7 @@ function Channel({ channelId: propChannelId }) {
         />
       </div>
 
+      {/* Channel Info */}
       <div className="bg-gray-100 dark:bg-zinc-900 p-6 flex flex-col sm:flex-row gap-6 items-center">
         <img
           src={channel.avatar || "/fallback-avatar.png"}
@@ -84,6 +94,7 @@ function Channel({ channelId: propChannelId }) {
           </p>
         </div>
 
+        {/* Edit and Upload Buttons if owner */}
         {isOwner && (
           <div className="flex gap-3">
             <button
@@ -102,7 +113,7 @@ function Channel({ channelId: propChannelId }) {
         )}
       </div>
 
-      {/* -------- VIDEOS GRID -------- */}
+      {/* Videos Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-6">
         {videos.map((video) => (
           <div key={video._id} className="relative">
@@ -124,6 +135,7 @@ function Channel({ channelId: propChannelId }) {
         <p className="text-center text-gray-500 mt-10">No videos uploaded</p>
       )}
 
+      {/* Edit and Upload Modals */}
       {showEdit && (
         <EditChannelModal
           channel={channel}

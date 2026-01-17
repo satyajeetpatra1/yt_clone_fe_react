@@ -1,16 +1,20 @@
 import { Link } from "react-router-dom";
 
+// Component to display a video card
 function VideoCard({ video }) {
+  // Fallback thumbnail and avatar URLs
   const fallbackThumbnail = "https://placehold.co/1280x720?text=No+Thumbnail";
 
   const fallbackAvatar = "https://placehold.co/100x100?text=User";
 
+  // Format views count
   const formatViews = (views = 0) => {
     if (views >= 1_000_000) return (views / 1_000_000).toFixed(1) + "M views";
     if (views >= 1_000) return (views / 1_000).toFixed(1) + "K views";
     return views + " views";
   };
 
+  // Format date to "DD MMM YY"
   const formatDate = (dateString) => {
     if (!dateString) return "";
 

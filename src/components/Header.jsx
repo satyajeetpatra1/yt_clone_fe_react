@@ -8,9 +8,13 @@ import { logout } from "../redux/slices/authSlice";
 import YTLogo from "../assets/Youtube_logo.png";
 import toast from "react-hot-toast";
 
+// Header component with logo, search, theme toggle, and user auth
 function Header() {
+  // Redux state and dispatch
   const dark = useSelector((store) => store.theme.dark);
   const user = useSelector((store) => store.auth.user);
+
+  // Redux dispatch
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
@@ -18,8 +22,10 @@ function Header() {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
+  // Debounce reference
   const debounceRef = useRef(null);
 
+  // Handle search action
   const handleSearch = () => {
     clearTimeout(debounceRef.current);
 
@@ -35,10 +41,12 @@ function Header() {
 
     clearTimeout(debounceRef.current);
 
+    // Debounce search
     debounceRef.current = setTimeout(() => {
       navigate(`/search?q=${query}`);
     }, 800);
 
+    // Cleanup on unmount or query change
     return () => clearTimeout(debounceRef.current);
   }, [query, navigate]);
 

@@ -3,7 +3,9 @@ import API from "../services/api";
 import toast from "react-hot-toast";
 import { categories } from "../constants/categories";
 
+// Component to upload a new video
 function UploadVideoModal({ channelId, onClose, onUploaded }) {
+  // State variables for video details
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
@@ -11,19 +13,23 @@ function UploadVideoModal({ channelId, onClose, onUploaded }) {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Toggle category selection
   const toggleCategory = (cat) => {
     setSelectedCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
     );
   };
 
+  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation
     if (!title || !videoUrl) {
       return toast.error("Title and video URL required");
     }
 
+    // At least one category must be selected
     if (selectedCategories.length === 0) {
       return toast.error("Select at least one category");
     }
@@ -31,6 +37,7 @@ function UploadVideoModal({ channelId, onClose, onUploaded }) {
     try {
       setLoading(true);
 
+      // API call to upload the video
       const res = await API.post("/videos", {
         title,
         description,
@@ -40,8 +47,12 @@ function UploadVideoModal({ channelId, onClose, onUploaded }) {
         channel: channelId,
       });
 
+      // Success feedback
       toast.success("Video uploaded");
+
+      // Invoke uploaded callback with new video data
       onUploaded(res.data);
+      // Close the modal
       onClose();
     } catch (err) {
       toast.error(err?.response?.data?.message || "Upload failed");

@@ -3,15 +3,19 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import MobileBottomNav from "./components/MobileBottomNav";
 
+// Main application component
 function App() {
   return (
     <div className="flex flex-col">
       <Header />
       <div className="flex flex-1 w-full">
         <Sidebar />
+
+        {/* Main content area */}
         <Outlet />
       </div>
 
+      {/* Mobile bottom navigation */}
       <MobileBottomNav />
     </div>
   );

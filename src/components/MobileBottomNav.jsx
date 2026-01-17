@@ -1,17 +1,19 @@
 import { MdHomeFilled, MdSubscriptions, MdVideoLibrary } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 
+// Mobile bottom navigation for small screens
 function MobileBottomNav() {
   const { pathname } = useLocation();
 
+  // Navigation items
   const items = [
     { icon: <MdHomeFilled size={24} />, label: "Home", path: "/" },
     {
       icon: <MdSubscriptions size={24} />,
       label: "Subs",
-      path: "/subscriptions",
+      path: "/",
     },
-    { icon: <MdVideoLibrary size={24} />, label: "Library", path: "/library" },
+    { icon: <MdVideoLibrary size={24} />, label: "Library", path: "/" },
   ];
 
   return (

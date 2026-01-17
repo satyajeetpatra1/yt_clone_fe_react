@@ -6,34 +6,41 @@ import API from "../services/api";
 import { setUser } from "../redux/slices/authSlice";
 import YTLogo from "../assets/Youtube_logo.png";
 
+// Login component
 export default function Login() {
+  // Redux dispatch and navigation
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Form state
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
+  // Handle input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation
     if (!form.email || !form.password) {
       toast.error("All fields are required");
       return;
     }
 
     try {
+      // API call to login
       const res = await API.post("/auth/login", form);
 
       // store token
       localStorage.setItem("token", res.data.token);
 
-      // store user in redux + localStorage
+      // store user in redux
       dispatch(setUser(res.data.user));
 
       toast.success("Logged in successfully");
