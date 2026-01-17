@@ -62,12 +62,12 @@ function EditChannelModal({ channel, onClose, onUpdated }) {
           />
 
           <div className="flex justify-end gap-3 pt-3">
-            <button type="button" onClick={onClose}>
+            <button type="button" onClick={onClose} className="cursor-pointer">
               Cancel
             </button>
             <button
               disabled={loading}
-              className="px-4 py-2 bg-red-600 text-white rounded"
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded cursor-pointer"
             >
               Save
             </button>
