@@ -16,17 +16,49 @@ function UploadVideoModal({ channelId, onClose, onUploaded }) {
   // Toggle category selection
   const toggleCategory = (cat) => {
     setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat],
     );
   };
+
+  function getYouTubeIframeLink(url) {
+    if (typeof url !== "string") return "invalid";
+
+    url = url.trim();
+
+    // If already a valid YouTube iframe embed link
+    const iframeRegex =
+      /^https?:\/\/(www\.)?youtube\.com\/embed\/[a-zA-Z0-9_-]{11}(\?.*)?$/;
+    if (iframeRegex.test(url)) {
+      return url;
+    }
+
+    // Match different YouTube video URL formats
+    const videoRegex =
+      /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtube\.com\/shorts\/|youtube\.com\/live\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
+    const match = url.match(videoRegex);
+
+    if (match && match[1]) {
+      const videoId = match[1];
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    return "invalid";
+  }
 
   // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let videoLink = getYouTubeIframeLink(videoUrl).trim();
+
     // Validation
     if (!title || !videoUrl) {
       return toast.error("Title and video URL required");
+    }
+
+    if (videoLink === "invalid") {
+      return toast.error("Invalid video URL");
     }
 
     // At least one category must be selected
@@ -41,7 +73,7 @@ function UploadVideoModal({ channelId, onClose, onUploaded }) {
       const res = await API.post("/videos", {
         title,
         description,
-        videoUrl,
+        videoUrl: videoLink,
         thumbnailUrl,
         category: selectedCategories, // 🔥 ARRAY
         channel: channelId,
